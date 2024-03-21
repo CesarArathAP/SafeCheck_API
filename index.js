@@ -6,6 +6,7 @@ const { conexion } = require('./db/conexion');
 const cors = require("cors");
 const docentesRouter = require('./routes/docentes');
 const vigilanciaRouter = require('./routes/vigilancia'); // Importar el enrutador de vigilancia
+const { loginVigilancia } = require('./controllers/loginVigilancia'); // Importar el controlador de login para vigilantes
 
 console.log("La aplicación de Node se ha inicializado correctamente.");
 
@@ -26,7 +27,7 @@ app.use(bodyParser.json());
 app.use('/docentes', docentesRouter);
 app.use('/vigilancia', vigilanciaRouter); // Usar el enrutador de vigilancia
 
-// Ruta para mostrar el formulario de inicio de sesión
+// Ruta para mostrar el formulario de inicio de sesión para docentes
 app.get('/login', (req, res) => {
   res.send(`
     <form action="/docentes/login" method="post">
@@ -38,6 +39,22 @@ app.get('/login', (req, res) => {
     </form>
   `);
 });
+
+// Ruta para mostrar el formulario de inicio de sesión para vigilantes
+app.get('/vigilancia/login', (req, res) => {
+  res.send(`
+    <form action="/vigilancia/login" method="post">
+      <label for="username">Nombre de usuario:</label>
+      <input type="text" id="username" name="username" required><br><br>
+      <label for="password">Contraseña:</label>
+      <input type="password" id="password" name="password" required><br><br>
+      <button type="submit">Iniciar sesión</button>
+    </form>
+  `);
+});
+
+// Ruta para manejar el inicio de sesión para vigilantes
+app.post('/vigilancia/login', loginVigilancia);
 
 // Manejo de errores para rutas no encontradas
 app.use((req, res, next) => {
