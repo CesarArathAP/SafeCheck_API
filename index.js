@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { conexion } = require('./db/conexion');
 const cors = require("cors");
-const docentesRouter = require('./routes/Docentes');
+const docentesRouter = require('./routes/docentes');
 
 console.log("El App de Node incializada correctamente");
 // Concetar a la base de datos de mongo

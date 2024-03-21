@@ -1,8 +1,10 @@
+// routes/docentes.js
+
 const express = require('express');
 const router = express.Router();
-const { login } = require('../controllers/login');
+const { obtenerDocentes } = require('../controllers/docentes');
 
-// Rutas para la autenticación de docentes
-router.post('/login', login);
+// Ruta para obtener todos los docentes en formato JSON
+router.get('/', obtenerDocentes);
 
 module.exports = router;
