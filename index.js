@@ -1,8 +1,11 @@
+// index.js
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const { conexion } = require('./db/conexion');
 const cors = require("cors");
 const docentesRouter = require('./routes/docentes');
+const vigilanciaRouter = require('./routes/vigilancia'); // Importar el enrutador de vigilancia
 
 console.log("La aplicación de Node se ha inicializado correctamente.");
 
@@ -21,6 +24,7 @@ app.use(bodyParser.json());
 
 // Rutas
 app.use('/docentes', docentesRouter);
+app.use('/vigilancia', vigilanciaRouter); // Usar el enrutador de vigilancia
 
 // Ruta para mostrar el formulario de inicio de sesión
 app.get('/login', (req, res) => {
