@@ -1,19 +1,24 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const mongoose = require('./db/conexion');
+const { conexion } = require('./db/conexion');
+const cors = require("cors");
 const docentesRouter = require('./routes/Docentes');
 
+console.log("El App de Node incializada correctamente");
+// Concetar a la base de datos de mongo
+conexion();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-
+const puerto = process.env.PORT || 3000;
+// Configurar cors
+app.use(cors());
 // Middleware
 app.use(bodyParser.json());
 
 // Rutas
 app.use('/docentes', docentesRouter);
 
-// Iniciar el servidor
-app.listen(PORT, () => {
-  console.log(`Servidor escuchando en http://localhost:${PORT}`);
+//Escuchar las peticiones HTTP
+app.listen(puerto, () => {
+  console.log(" Servidor Corriendo en el puerto " + puerto);
 });
