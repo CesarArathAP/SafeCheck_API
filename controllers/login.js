@@ -2,7 +2,7 @@
 
 const Docente = require('../models/SafeCheck');
 const Carrera = require('../models/Carreras');
-const Director = require('../models/Director'); // Importamos el modelo correcto
+const Director = require('../models/Director');
 
 const login = async (req, res) => {
   const { username, password } = req.body;
@@ -24,23 +24,14 @@ const login = async (req, res) => {
     const carreras = await Carrera.find({ carrera_id: { $in: docente.carreras.map(carrera => carrera.id) } });
 
     // Obtener el nombre del director de la carrera del docente
-    let directorCarrera = "Director no asignado";
+    let infoCarreras = [];
     for (const carrera of carreras) {
-      const director = await Director.findOne({ carreras: { $elemMatch: { id: carrera.carrera_id } } });
+      const director = await Director.findOne({ 'carreras.id': carrera.carrera_id });
+      let directorCarrera = "Director no asignado";
       if (director) {
         directorCarrera = `${director.nombre} ${director.apellido_paterno} ${director.apellido_materno}`;
-        break;
       }
-    }
-
-    // Construir el mensaje de bienvenida con el nombre del docente y sus carreras asignadas
-    const nombreCompleto = `${docente.nombre} ${docente.apellido_paterno} ${docente.apellido_materno}`;
-    const mensajeBienvenida = `¡Bienvenido ${nombreCompleto}!`;
-
-    // Construir la información de las carreras y sus especialidades
-    const infoCarreras = carreras.map(carrera => {
       const especialidades = carrera.especialidades.map(especialidad => {
-        // Incluir la información de los alumnos para cada especialidad
         const alumnos = especialidad.alumnos.map(alumno => ({
           matricula: alumno.matricula,
           nombre: alumno.nombre,
@@ -57,12 +48,16 @@ const login = async (req, res) => {
           alumnos: alumnos
         };
       });
-      return {
+      infoCarreras.push({
         nombreCarrera: carrera.nombre,
         directorCarrera: directorCarrera,
         especialidades: especialidades
-      };
-    });
+      });
+    }
+
+    // Construir el mensaje de bienvenida con el nombre del docente
+    const nombreCompleto = `${docente.nombre} ${docente.apellido_paterno} ${docente.apellido_materno}`;
+    const mensajeBienvenida = `¡Bienvenido ${nombreCompleto}!`;
 
     // Autenticación exitosa, devolver el mensaje de bienvenida y la información de las carreras
     res.status(200).json({ message: mensajeBienvenida, carreras: infoCarreras });
