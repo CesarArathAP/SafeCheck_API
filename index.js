@@ -7,6 +7,7 @@ const cors = require("cors");
 const docentesRouter = require('./routes/docentes');
 const vigilanciaRouter = require('./routes/vigilancia'); // Importar el enrutador de vigilancia
 const { loginVigilancia } = require('./controllers/loginVigilancia'); // Importar el controlador de login para vigilantes
+const { login } = require('./controllers/login');
 
 console.log("La aplicación de Node se ha inicializado correctamente.");
 
@@ -23,6 +24,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+app.set('view engine', 'ejs'); // Configurar Express para usar EJS como motor de plantillas
 // Rutas
 app.use('/docentes', docentesRouter);
 app.use('/vigilancia', vigilanciaRouter); // Usar el enrutador de vigilancia
@@ -55,6 +57,9 @@ app.get('/vigilancia/login', (req, res) => {
 
 // Ruta para manejar el inicio de sesión para vigilantes
 app.post('/vigilancia/login', loginVigilancia);
+
+// Ruta para manejar el inicio de sesión de docentes
+app.post('/docentes/login', login);
 
 // Manejo de errores para rutas no encontradas
 app.use((req, res, next) => {
