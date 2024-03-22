@@ -15,7 +15,7 @@ const directorSchema = new mongoose.Schema({
     id: Number,
     nombre: String
   }]
-});
+}, { collection: 'directores' }); // Especificamos el nombre de la colección
 
 const Director = mongoose.model('Director', directorSchema);
 

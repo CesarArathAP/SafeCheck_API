@@ -2,7 +2,7 @@
 
 const Docente = require('../models/SafeCheck');
 const Carrera = require('../models/Carreras');
-const Director = require('../models/Directores');
+const Director = require('../models/Director'); // Importamos el modelo correcto
 
 const login = async (req, res) => {
   const { username, password } = req.body;
@@ -26,7 +26,7 @@ const login = async (req, res) => {
     // Obtener el nombre del director de la carrera del docente
     let directorCarrera = "Director no asignado";
     for (const carrera of carreras) {
-      const director = await Director.findOne({ "carreras.id": carrera.carrera_id });
+      const director = await Director.findOne({ carreras: { $elemMatch: { id: carrera.carrera_id } } });
       if (director) {
         directorCarrera = `${director.nombre} ${director.apellido_paterno} ${director.apellido_materno}`;
         break;
