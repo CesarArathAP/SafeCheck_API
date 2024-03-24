@@ -60,27 +60,9 @@ app.get('/vigilancia/login', (req, res) => {
 // Nueva ruta para mostrar el mensaje de bienvenida y el formulario de registro de visita para vigilantes autenticados
 app.get('/vigilancia/login/acceso', (req, res) => {
   const nombreOficial = req.query.nombre; // Obtener el nombre del oficial de la consulta de la URL
-  res.send(`
-    <h1>Bienvenido Oficial ${nombreOficial}</h1>
-    <form action="/vigilancia/registro-visita" method="post">
-      <label for="visitor_name">Nombre del visitante:</label>
-      <input type="text" id="visitor_name" name="visitor_name" required><br><br>
-      <label for="purpose">Propósito de la visita:</label>
-      <input type="text" id="purpose" name="purpose" required><br><br>
-      <label for="area">Área a visitar:</label>
-      <input type="text" id="area" name="area" required><br><br>
-      <label for="date">Fecha de la visita:</label>
-      <input type="text" id="date" name="date" required><br><br>
-      <label for="entry_time">Hora de entrada:</label>
-      <input type="text" id="entry_time" name="entry_time" required><br><br>
-      <label for="exit_time">Hora de salida:</label>
-      <input type="text" id="exit_time" name="exit_time" required><br><br>
-      <label for="photo">Fotografía:</label>
-      <input type="file" id="photo" name="photo"><br><br>
-      <button type="submit">Registrar visita</button>
-    </form>
-  `);
+  res.json({ message: `Bienvenido Oficial ${nombreOficial}` });
 });
+
 
 // Ruta para manejar el registro de visitas
 app.post('/vigilancia/registro-visita', registrarVisita);

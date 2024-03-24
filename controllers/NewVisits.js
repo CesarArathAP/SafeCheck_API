@@ -1,7 +1,9 @@
-// controllers/NewVisits.js
-
 const Visita = require('../models/Visita');
 const fs = require('fs');
+
+const generarIDAleatorio = () => {
+  return Math.floor(Math.random() * 99) + 1; // Genera un número aleatorio entre 1 y 99
+};
 
 const registrarVisita = async (req, res) => {
   const { visitor_name, purpose, area, date, entry_time, exit_time } = req.body;
@@ -11,12 +13,14 @@ const registrarVisita = async (req, res) => {
     // Verificar si se ha enviado una foto y si es un archivo válido
     if (req.file) {
       const filePath = req.file.path;
-      photo = fs.readFileSync(filePath, { encoding: 'base64' });
-      fs.unlinkSync(filePath); // Eliminar el archivo después de leerlo
+      photo = filePath; // Almacena la ruta del archivo en lugar de convertirlo a base64
     }
+
+    const id = generarIDAleatorio(); // Generar el ID aleatorio
 
     // Crear un nuevo objeto de visita con los datos proporcionados
     const nuevaVisita = new Visita({
+      id: id, // Agregar el ID aleatorio al objeto de visita
       visita: {
         visitante: {
           nombre: visitor_name

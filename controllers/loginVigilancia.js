@@ -19,8 +19,8 @@ const loginVigilancia = async (req, res) => {
     }
 
     // Autenticación exitosa
-    // Redirigir al vigilante a la nueva ruta y pasar el nombre del oficial
-    res.redirect(`/vigilancia/login/acceso?nombre=${vigilante.nombre}`);
+    // Envía el nombre completo del vigilante
+    res.status(200).json({ message: `Bienvenido Oficial ${vigilante.nombre} ${vigilante.apellidos}` });
   } catch (error) {
     console.error('Error de autenticación:', error);
     res.status(500).json({ error: 'Error de servidor' });

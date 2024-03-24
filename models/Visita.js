@@ -1,11 +1,13 @@
-// models/Visita.js
-
 const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
 // Definir el esquema de la visita
 const visitaSchema = new Schema({
+  id: {
+    type: Number,
+    required: true
+  },
   visita: {
     visitante: {
       nombre: {
