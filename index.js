@@ -8,7 +8,6 @@ const docentesRouter = require('./routes/docentes');
 const vigilanciaRouter = require('./routes/vigilancia'); // Importar el enrutador de vigilancia
 const { loginVigilancia } = require('./controllers/loginVigilancia'); // Importar el controlador de login para vigilantes
 const { login } = require('./controllers/login');
-const { registrarVisita } = require('./controllers/NewVisits');
 const carrerasRouter = require('./routes/carreras'); // Importar la ruta de carreras
 
 
@@ -59,15 +58,11 @@ app.get('/vigilancia/login', (req, res) => {
   `);
 });
 
-// Nueva ruta para mostrar el mensaje de bienvenida y el formulario de registro de visita para vigilantes autenticados
 app.get('/vigilancia/login/acceso', (req, res) => {
   const nombreOficial = req.query.nombre; // Obtener el nombre del oficial de la consulta de la URL
   res.json({ message: `Bienvenido Oficial ${nombreOficial}` });
 });
 
-
-// Ruta para manejar el registro de visitas
-app.post('/vigilancia/registro-visita', registrarVisita);
 
 // Ruta para manejar el inicio de sesión para vigilantes
 app.post('/vigilancia/login', loginVigilancia);
