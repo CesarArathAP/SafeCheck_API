@@ -9,6 +9,7 @@ const vigilanciaRouter = require('./routes/vigilancia'); // Importar el enrutado
 const { loginVigilancia } = require('./controllers/loginVigilancia'); // Importar el controlador de login para vigilantes
 const { login } = require('./controllers/login');
 const { registrarVisita } = require('./controllers/NewVisits');
+const carrerasRouter = require('./routes/carreras'); // Importar la ruta de carreras
 
 
 console.log("La aplicación de Node se ha inicializado correctamente.");
@@ -30,6 +31,7 @@ app.set('view engine', 'ejs'); // Configurar Express para usar EJS como motor de
 // Rutas
 app.use('/docentes', docentesRouter);
 app.use('/vigilancia', vigilanciaRouter); // Usar el enrutador de vigilancia
+app.use('/carreras', carrerasRouter); // Usar la ruta de carreras
 
 // Ruta para mostrar el formulario de inicio de sesión para docentes
 app.get('/login', (req, res) => {
