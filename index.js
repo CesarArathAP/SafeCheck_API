@@ -5,11 +5,14 @@ const bodyParser = require('body-parser');
 const { conexion } = require('./db/conexion');
 const cors = require("cors");
 const docentesRouter = require('./routes/docentes');
-const vigilanciaRouter = require('./routes/vigilancia'); // Importar el enrutador de vigilancia
-const { loginVigilancia } = require('./controllers/loginVigilancia'); // Importar el controlador de login para vigilantes
+const vigilanciaRouter = require('./routes/vigilancia');
+const { loginVigilancia } = require('./controllers/loginVigilancia');
 const { login } = require('./controllers/login');
-const carrerasRouter = require('./routes/carreras'); // Importar la ruta de carreras
-
+const carrerasRouter = require('./routes/carreras');
+const visitasRouter = require('./routes/visitas');
+const { registrarVisita } = require('./controllers/registrarVisitas');
+const multer = require('multer');
+const path = require('path');
 
 console.log("La aplicación de Node se ha inicializado correctamente.");
 
@@ -27,10 +30,23 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.set('view engine', 'ejs'); // Configurar Express para usar EJS como motor de plantillas
+
+// Configuración de Multer para guardar la imagen en la carpeta uploads
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/')
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname))
+  }
+});
+
+const upload = multer({ storage: storage });
+
 // Rutas
 app.use('/docentes', docentesRouter);
-app.use('/vigilancia', vigilanciaRouter); // Usar el enrutador de vigilancia
-app.use('/carreras', carrerasRouter); // Usar la ruta de carreras
+app.use('/vigilancia', vigilanciaRouter);
+app.use('/carreras', carrerasRouter);
 
 // Ruta para mostrar el formulario de inicio de sesión para docentes
 app.get('/login', (req, res) => {
@@ -58,17 +74,37 @@ app.get('/vigilancia/login', (req, res) => {
   `);
 });
 
-app.get('/vigilancia/login/acceso', (req, res) => {
-  const nombreOficial = req.query.nombre; // Obtener el nombre del oficial de la consulta de la URL
-  res.json({ message: `Bienvenido Oficial ${nombreOficial}` });
+// Ruta para mostrar el formulario de registro de visitas
+app.get('/registrar-visita', (req, res) => {
+  res.send(`
+    <form action="/visitas" method="post" enctype="multipart/form-data">
+      <label for="nombre">Nombre del visitante:</label>
+      <input type="text" id="nombre" name="visita[visitante][nombre]" required><br><br>
+      <label for="motivo">Motivo de la visita:</label>
+      <input type="text" id="motivo" name="visita[motivo][descripcion]" required><br><br>
+      <label for="area">Área a visitar:</label>
+      <input type="text" id="area" name="visita[ubicacion][area]" required><br><br>
+      <label for="fecha">Fecha de registro:</label>
+      <input type="text" id="fecha" name="visita[registro][fecha]" required><br><br>
+      <label for="hora_entrada">Hora de entrada:</label>
+      <input type="text" id="hora_entrada" name="visita[registro][hora_entrada]" required><br><br>
+      <label for="hora_salida">Hora de salida:</label>
+      <input type="text" id="hora_salida" name="visita[registro][hora_salida]" required><br><br>
+      <label for="fotografia">Fotografía:</label>
+      <input type="file" id="fotografia" name="fotografia" required><br><br>
+      <button type="submit">Registrar visita</button>
+    </form>
+  `);
 });
-
 
 // Ruta para manejar el inicio de sesión para vigilantes
 app.post('/vigilancia/login', loginVigilancia);
 
 // Ruta para manejar el inicio de sesión de docentes
 app.post('/docentes/login', login);
+
+// Ruta para manejar las visitas
+app.post('/visitas', upload.single('fotografia'), registrarVisita);
 
 // Manejo de errores para rutas no encontradas
 app.use((req, res, next) => {
