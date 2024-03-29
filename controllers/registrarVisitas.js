@@ -1,31 +1,41 @@
-// controllers/registrarVisitas.js
-
 const Visitas = require('../models/Visitas');
 const fs = require('fs').promises;
 
 async function registrarVisita(req, res, next) {
   try {
-    const visitaData = req.body;
-    // Leer la imagen cargada y convertirla a base64
-    const fotografia = req.file.path;
-    const tipoMIME = req.file.mimetype;
-    const imagenBuffer = await fs.readFile(fotografia);
-    const imagenBase64 = `data:${tipoMIME};base64,${imagenBuffer.toString('base64')}`;
+    // Imprimir los datos del formulario recibidos
+    console.log('Datos del formulario recibidos:', req.body);
 
-    // Agregar la imagen base64 a los datos de la visita
-    visitaData.visita.fotografia = imagenBase64;
+    const { visitante, motivo, area, fecha, hora_entrada, hora_salida, fotografia } = req.body;
 
     // Obtener el último ID y sumarle 1 para generar un nuevo ID
     const ultimoId = await Visitas.findOne({}, {}, { sort: { 'id': -1 } });
     const nuevoId = ultimoId ? ultimoId.id + 1 : 1;
 
-    // Agregar el ID al objeto visitaData
-    visitaData.id = nuevoId;
+    // Crear un nuevo documento de visita con los datos recibidos y el ID generado
+    const nuevaVisita = new Visitas({
+      id: nuevoId,
+      visita: {
+        visitante: { nombre: visitante },
+        motivo: { descripcion: motivo },
+        ubicacion: { area: area },
+        registro: {
+          fecha: fecha,
+          hora_entrada: hora_entrada,
+          hora_salida: hora_salida
+        },
+        fotografia: fotografia
+      }
+    });
 
-    const nuevaVisita = new Visitas(visitaData);
+    // Guardar la nueva visita en la base de datos
     await nuevaVisita.save();
-    // Enviar solo el mensaje de éxito en la respuesta
-    res.json({ message: 'Visita registrada correctamente' });
+
+    // Enviar una respuesta con los detalles completos de la visita registrada
+    res.json({
+      message: 'Visita registrada correctamente',
+      visita: nuevaVisita
+    });
   } catch (error) {
     next(error);
   }
