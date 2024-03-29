@@ -7,6 +7,6 @@ const router = express.Router();
 const { registrarVisita } = require('../controllers/registrarVisitas');
 
 // Ruta para manejar el registro de visitas
-router.post('/', registrarVisita);
+router.post('/visitas', registrarVisita);
 
 module.exports = router;

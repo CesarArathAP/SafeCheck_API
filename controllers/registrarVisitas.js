@@ -2,7 +2,6 @@
 
 const Visitas = require('../models/Visitas');
 const fs = require('fs').promises;
-const path = require('path');
 
 async function registrarVisita(req, res, next) {
   try {
@@ -25,7 +24,8 @@ async function registrarVisita(req, res, next) {
 
     const nuevaVisita = new Visitas(visitaData);
     await nuevaVisita.save();
-    res.json({ message: 'Visita registrada correctamente', visita: nuevaVisita });
+    // Enviar solo el mensaje de éxito en la respuesta
+    res.json({ message: 'Visita registrada correctamente' });
   } catch (error) {
     next(error);
   }
