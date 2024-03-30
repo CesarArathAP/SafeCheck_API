@@ -3,8 +3,8 @@ const fs = require('fs').promises;
 
 async function registrarVisita(req, res, next) {
   try {
-    // Imprimir los datos del formulario recibidos
-    console.log('Datos del formulario recibidos:', req.body);
+    // Mostrar un mensaje de éxito
+    console.log('Datos del formulario de registro de visita recibidos con éxito');
 
     const { visitante, motivo, area, fecha, hora_entrada, hora_salida, fotografia } = req.body;
 

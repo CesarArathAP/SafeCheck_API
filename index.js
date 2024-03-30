@@ -13,6 +13,7 @@ const visitasRouter = require('./routes/visitas');
 const { registrarVisita } = require('./controllers/registrarVisitas');
 const multer = require('multer');
 const path = require('path');
+const obtenerVisitasRouter = require('./routes/obtener_visitas');
 
 console.log("La aplicación de Node se ha inicializado correctamente.");
 
@@ -47,6 +48,7 @@ const upload = multer({ storage: storage });
 app.use('/docentes', docentesRouter);
 app.use('/vigilancia', vigilanciaRouter);
 app.use('/carreras', carrerasRouter);
+app.use('/obtener_visitas', obtenerVisitasRouter);
 
 // Ruta para mostrar el formulario de inicio de sesión para docentes
 app.get('/login', (req, res) => {
