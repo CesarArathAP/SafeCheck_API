@@ -4,6 +4,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { conexion } = require('./db/conexion');
 const cors = require("cors");
+const http = require('http');
+const io = require('socket.io')(http);
+const notifier = require('node-notifier');
+
 const docentesRouter = require('./routes/docentes');
 const vigilanciaRouter = require('./routes/vigilancia');
 const { loginVigilancia } = require('./controllers/loginVigilancia');
@@ -58,6 +62,16 @@ app.use('/api/test', testRouter);
 app.use('/api/get-alumnos', getAlumnosTestRouter);
 app.use('/api/attention-alumnos', attentionCallsRoute);
 app.use('/api/attentioncalls', attentionCallsRoute);
+// Endpoint para recibir notificaciones de la aplicación móvil
+app.post('/notificaciones', (req, res) => {
+  const { title, message } = req.body;
+  // Mostrar la notificación en la computadora
+  notifier.notify({
+    title: title,
+    message: message,
+  });
+  res.sendStatus(200);
+});
 
 // Ruta para mostrar el formulario de inicio de sesión para docentes
 app.get('/login', (req, res) => {
@@ -131,4 +145,9 @@ app.use((err, req, res, next) => {
 // Escuchar las peticiones HTTP
 app.listen(puerto, () => {
   console.log("Servidor corriendo en el puerto " + puerto);
+});
+
+// Escuchar eventos de conexión desde la aplicación móvil
+io.on('connection', (socket) => {
+  console.log('Nueva conexión');
 });
