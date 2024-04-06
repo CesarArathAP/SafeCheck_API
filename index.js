@@ -22,6 +22,7 @@ const updateVisitasRouter = require('./routes/update_visitas_router');
 const testRouter = require('./routes/test');
 const getAlumnosTestRouter = require('./routes/get_alumnos_test');
 const attentionCallsRoute = require('./routes/attention_calls_route');
+const searchAlumnosRouter = require('./routes/searchStudentsQR');
 
 console.log("La aplicación de Node se ha inicializado correctamente.");
 
@@ -61,6 +62,7 @@ app.use('/api/update_visitas', updateVisitasRouter);
 app.use('/api/test', testRouter);
 app.use('/api/get-alumnos', getAlumnosTestRouter);
 app.use('/api/attention-alumnos', attentionCallsRoute);
+app.use('/api', searchAlumnosRouter); 
 app.use('/api/attentioncalls', attentionCallsRoute);
 // Endpoint para recibir notificaciones de la aplicación móvil
 app.post('/notificaciones', (req, res) => {
