@@ -23,6 +23,7 @@ const testRouter = require('./routes/test');
 const getAlumnosTestRouter = require('./routes/get_alumnos_test');
 const attentionCallsRoute = require('./routes/attention_calls_route');
 const searchAlumnosRouter = require('./routes/searchStudentsQR');
+const arduinoMQ3Router = require('./routes/arduino_mq3');
 
 console.log("La aplicación de Node se ha inicializado correctamente.");
 
@@ -54,6 +55,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Rutas
+app.use('/arduino-mq3', arduinoMQ3Router);
 app.use('/docentes', docentesRouter);
 app.use('/vigilancia', vigilanciaRouter);
 app.use('/carreras', carrerasRouter);
@@ -122,6 +124,14 @@ app.get('/registrar-visita', (req, res) => {
       <button type="submit">Registrar visita</button>
     </form>
   `);
+});
+
+// Ruta para manejar los datos del sensor MQ3 en formato JSON
+app.get('/datos-mq3', (req, res) => {
+  // Aquí deberías obtener los datos del sensor MQ3 desde el controlador
+  // y enviarlos como respuesta en formato JSON
+  const datosSensorMQ3 = obtenerDatosSensorMQ3(); // Función hipotética para obtener los datos del controlador
+  res.json(datosSensorMQ3);
 });
 
 // Ruta para manejar el inicio de sesión para vigilantes

@@ -16,6 +16,7 @@ Este archivo `package.json` describe las dependencias y scripts de la API SafeCh
 | node-notifier   | `npm install node-notifier`|
 | nodemon         | `npm install nodemon`      |
 | socket.io       | `npm install socket.io`    |
+|serial port      | `npm install serialport`   |
 
 ## Scripts
 
